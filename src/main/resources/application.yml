@@ -1,0 +1,52 @@
+server:
+  context-path: /wmall
+  port: 80
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/wmall?characterEncoding=utf-8&useSSL=false
+    username: root
+    password: 111111
+  jackson:
+    default-property-inclusion: non_null
+  ##thymeleaf config##
+  thymeleaf:
+    mode: LEGACYHTML5
+    cache: false
+    content-type: text/html
+    encoding: UTF-8
+dataSource:
+  initialSize: 3
+  maxActive: 8
+  minIdle: 3
+  maxWait: 60000
+  timeBetweenEvictionRunsMillis: 600000
+  minEvictableIdleTimeMillis: 300000
+  logAbandoned: true
+  validationQuery: SELECT 'x'
+logback:
+  logdir: D:\\tempFile\\logback\\wmall
+wechat:
+  appId: wx7220dc9281a9518e
+  corpId: wwae679b71d1986931
+  agentId: 1000002
+  corpSecret: UrBeKxk06y20zGq2b4NpuXfnQg_7wiOGAgnT0dp0wfU
+  expireTime: 7200
+  mchId: 
+  mchKey: 
+  keyPath: 
+  appSecret: d4624c36b6795d1d99dcf0547af5443d
+  rootUrl: http://slyritd.mynatapp.cc/wmall
+  authScope: snsapi_userinfo
+  codeUrl: https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&response_type=code&scope=SCOPE&state=STATE#wechat_redirect
+  tokenUrl: https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code
+  refreshTokenUrl: https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=APPID&grant_type=refresh_token&refresh_token=REFRESH_TOKEN
+  userInfoUrl: https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN
+  validTokenUrl: https://api.weixin.qq.com/sns/auth?access_token=ACCESS_TOKEN&openid=OPENID
+  sendMsgUrl: https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=ACCESS_TOKEN
+  corpTokenUrl: https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=ID&corpsecret=SECRECT
+  uploadUrl: https://qyapi.weixin.qq.com/cgi-bin/media/upload?access_token=ACCESS_TOKEN&type=TYPE
+  downLoadUrl: https://qyapi.weixin.qq.com/cgi-bin/media/get?access_token=ACCESS_TOKEN&media_id=MEDIA_ID
+  fileSavePath: D:\\tempFile\\wechat
+  createMenu: https://qyapi.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN&agentid=AGENTID
+  deleteMenu: https://qyapi.weixin.qq.com/cgi-bin/menu/delete?access_token=ACCESS_TOKEN&agentid=AGENTID\

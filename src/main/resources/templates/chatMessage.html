@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+    <script src="../js/sockjs.min.js"></script>
+    <script src="../js/stomp.js"></script>
+    <script src="../js/jquery-3.1.1.js"></script>
+</head>
+<body class="gray-bg">
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <!--<h3>客服聊天测试页面</h3>-->
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-1 control-label" for="connect">连接/断开:</label>
+                <button id="connect" class="col-sm-1 btn btn-success" type="submit">连 接</button>
+                <button id="disconnect" class="col-sm-1 btn btn-warning" type="submit" disabled="disabled">断 开
+                </button>
+            </div>
+
+            <div class="form-group">
+                <label for="chatMsg" class="col-sm-1 control-label">SMSG：</label>
+                <div class="col-sm-3">
+                    <input type="text" id="chatMsg" class="form-control" placeholder="Your message..."/>
+                </div>
+                <button id="send" class="col-sm-1 btn btn-primary" type="submit">发送</button>
+            </div>
+            <div class="form-group">
+                <table id="conversation" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>已接收消息：</th>
+                    </tr>
+                    </thead>
+                    <tbody id="msgContent"></tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    var stompClient = null;
+    //传递用户key值
+    var agentCode = "1000002"
+    var login = agentCode;
+
+    function setConnected(connected) {
+        $("#connect").prop("disabled", connected);
+        $("#disconnect").prop("disabled", !connected);
+        if (connected) {
+            $("#conversation").show();
+        }
+        else {
+            $("#conversation").hide();
+        }
+        $("#greetings").html("");
+    }
+
+    function connect() {
+        var socket = new SockJS('/wmall/dcits-websocket');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({login: login}, function (frame) {
+            setConnected(true);
+            console.log('Connected: ' + frame);
+            stompClient.subscribe('/chat/topic/greetings', function (greeting) {
+                showGreeting(JSON.parse(greeting.body).chatContent);
+            });
+        });
+    }
+
+    function disconnect() {
+        if (stompClient != null) {
+            stompClient.disconnect();
+        }
+        setConnected(false);
+        console.log("Disconnected");
+    }
+
+    function sendName() {
+        stompClient.send("/dcits/itsmChatCustomer", {}, JSON.stringify({
+            'chatContent': $("#chatMsg").val(),
+            'agentId': '1000002',
+            'userId': 'NieXiaoXu'
+        }));
+    }
+
+
+    function showGreeting(message) {
+        $("#msgContent").append("<tr><td>" + message + "</td></tr>");
+    }
+
+    $(function () {
+        $("form").on('submit', function (e) {
+            e.preventDefault();
+        });
+        $("#connect").click(function () {
+            connect();
+        });
+        $("#disconnect").click(function () {
+            disconnect();
+        });
+        $("#send").click(function () {
+            sendName();
+        });
+    });
+</script>
+</body>
+</html>

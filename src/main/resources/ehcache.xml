@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">
+
+    <diskStore path="/home/lipeng/itsm_use_dir/EhCacheTemp"/>
+    <!-- 默认的管理策略 maxElementsOnDisk： 在磁盘上缓存的element的最大数目，默认值为0，表示不限制。 eternal:设定缓存的elements是否永远不过期。
+		如果为true，则缓存的数据始终有效，如果为false那么还要根据timeToIdleSeconds判断:当缓存闲置n秒后销毁; timeToLiveSeconds判断:当缓存存活n秒后销毁;
+		overflowToDisk:是否保存到磁盘，当系统当机时; diskPersistent： 是否在磁盘上持久化。指重启jvm后，数据是否有效。默认为false。
+		diskExpiryThreadIntervalSeconds:对象检测线程运行时间间隔。 标识对象状态（过期/持久化）的线程多长时间运行一次。 -->
+    <!-- memoryStoreEvictionPolicy：当达到maxElementsInMemory限制时，Ehcache将会根据指定的策略去清理内存。可选策略有：LRU（最近最少使用，默认策略）、FIFO（先进先出）、LFU（最少访问次数）。 -->
+    <defaultCache
+            maxElementsInMemory="1000"
+            eternal="false"
+            timeToIdleSeconds="300"
+            timeToLiveSeconds="6000"
+            overflowToDisk="true"
+            diskPersistent="true"
+            diskExpiryThreadIntervalSeconds="120"
+            memoryStoreEvictionPolicy="LRU">
+    </defaultCache>
+
+    <cache name="eternalCache"
+           maxElementsInMemory="10000"
+           eternal="true"
+           overflowToDisk="true"
+           memoryStoreEvictionPolicy="FIFO"
+    />
+
+    <!--想使用查询缓存，这两个类需要添加-->
+    <cache
+            name="org.hibernate.cache.spi.UpdateTimestampsCache"
+            maxElementsInMemory="5000"
+            eternal="true"
+            overflowToDisk="true">
+    </cache>
+    <cache
+            name="org.hibernate.cache.internal.StandardQueryCache"
+            maxElementsInMemory="10000"
+            eternal="false"
+            timeToLiveSeconds="120"
+            overflowToDisk="true">
+    </cache>
+
+</ehcache>
